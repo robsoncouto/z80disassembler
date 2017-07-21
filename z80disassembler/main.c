@@ -274,7 +274,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
     case 0xEA: printf("\tJP PE, %02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=3; break;
     case 0xEB: printf("\tEX DE, HL"); break;//FIXME BITS GO HERE
     case 0xEC: printf("\tCALL PE, %02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=3; break;
-    case 0xED: printf("\t-EXTD INSTRUCTION-"); break;
+    case 0xED: extd_flag=1; break;//process extd instruction
     case 0xEE: printf("\tXOR %02x",buffer[pc+1]); inst_bytes=2; break;
     case 0xEF: printf("\tRST 28h"); break;
 
@@ -302,6 +302,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
   interpreted here below*/
   if(bit_flag){
     printf("%02X",buffer[pc]+1);//instruction code
+    inst_bytes=2;
     switch (buffer[pc]+1) {
       case 0x00: printf("\tRLC B"); break;
       case 0x01: printf("\tRLC C"); break;
@@ -575,6 +576,99 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0xFE: printf("\tSET 7, [HL]"); break;
       case 0xFF: printf("\tSET 7, A"); break;
       default: printf("ILLEGAL INSTRUCTION"); break;
+    }
+  }
+  if(extd_flag){
+    printf("%02X",buffer[pc]+1);//instruction code
+    inst_bytes=2;
+    switch (buffer[pc]+1) {
+      case 0x40: printf("\tIN B, [C]"); break;
+      case 0x41: printf("\tOUT [C], B"); break;
+      case 0x42: printf("\tSBC HL, BC"); break;
+      case 0x43: printf("\tLD [%02x%02x], BC",buffer[pc+1],buffer[pc+2]); break;
+      case 0x44: printf("\tNEG"); break;
+      case 0x45: printf("\tRETN"); break;
+      case 0x46: printf("\tIM 0"); break;
+      case 0x47: printf("\tLD I, A"); break;
+      case 0x48: printf("\tIN C, [C]"); break;
+      case 0x49: printf("\tOUT [C], C"); break;
+      case 0x4A: printf("\tADC [HL], BC"); break;
+      case 0x4B: printf("\tLD BC, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x4C: printf("\tNEG"); break;
+      case 0x4D: printf("\tRETI"); break;
+      case 0x4E: printf("\tIM 0/1"); break;
+      case 0x4F: printf("\tLD R, A"); break;
+
+      case 0x50: printf("\tIN D, [C]"); break;
+      case 0x51: printf("\tOUT [C], D"); break;
+      case 0x52: printf("\tSBC HL, DE"); break;
+      case 0x53: printf("\tLD [%02x%02x], DE",buffer[pc+1],buffer[pc+2]); break;
+      case 0x54: printf("\tNEG"); break;
+      case 0x55: printf("\tRETN"); break;
+      case 0x56: printf("\tIM 1"); break;
+      case 0x57: printf("\tLD A, I"); break;
+      case 0x58: printf("\tIN E, [C]"); break;
+      case 0x59: printf("\tOUT [C], E"); break;
+      case 0x5A: printf("\tADC [HL], DE"); break;
+      case 0x5B: printf("\tLD DE, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x5C: printf("\tNEG"); break;
+      case 0x5D: printf("\tRETN"); break;
+      case 0x5E: printf("\tIM 2"); break;
+      case 0x5F: printf("\tLD A, R"); break;
+
+      case 0x60: printf("\tIN H, [C]"); break;
+      case 0x61: printf("\tOUT [C], H"); break;
+      case 0x62: printf("\tSBC HL, HL"); break;
+      case 0x63: printf("\tLD [%02x%02x], HL",buffer[pc+1],buffer[pc+2]); break;
+      case 0x64: printf("\tNEG"); break;
+      case 0x65: printf("\tRETN"); break;
+      case 0x66: printf("\tIM 0"); break;
+      case 0x67: printf("\tRRD"); break;
+      case 0x68: printf("\tIN L, [C]"); break;
+      case 0x69: printf("\tOUT [C], L"); break;
+      case 0x6A: printf("\tADC [HL], HL"); break;
+      case 0x6B: printf("\tLD HL, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x6C: printf("\tNEG"); break;
+      case 0x6D: printf("\tRETN"); break;
+      case 0x6E: printf("\tIM 0/1"); break;
+      case 0x6F: printf("\tRLD"); break;
+
+      case 0x70: printf("\tIN [C]"); break;
+      case 0x71: printf("\tOUT [C], 0"); break;
+      case 0x72: printf("\tSBC HL, SP"); break;
+      case 0x73: printf("\tLD [%02x%02x], SP",buffer[pc+1],buffer[pc+2]); break;
+      case 0x74: printf("\tNEG"); break;
+      case 0x75: printf("\tRETN"); break;
+      case 0x76: printf("\tIM 1"); break;
+      //case 0x67: printf("\tRRD"); break;
+      case 0x78: printf("\tIN A, [C]"); break;
+      case 0x79: printf("\tOUT [C], A"); break;
+      case 0x7A: printf("\tADC [HL], SP"); break;
+      case 0x7B: printf("\tLD SP, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x7C: printf("\tNEG"); break;
+      case 0x7D: printf("\tRETN"); break;
+      case 0x7E: printf("\tIM 2"); break;
+      //case 0x6F: printf("\tRLD"); break;
+
+      case 0xA0: printf("\tLDI"); break;
+      case 0xA1: printf("\tCPI"); break;
+      case 0xA2: printf("\tINI"); break;
+      case 0xA3: printf("\tOUTI"); break;
+      case 0xA8: printf("\tLDD"); break;
+      case 0xA9: printf("\tCPD"); break;
+      case 0xAA: printf("\tIMD"); break;
+      case 0xAB: printf("\tOUTD"); break;
+
+      case 0xB0: printf("\tLDIR"); break;
+      case 0xB1: printf("\tCPIR"); break;
+      case 0xB2: printf("\tINIR"); break;
+      case 0xB3: printf("\tOUTIR"); break;
+      case 0xB8: printf("\tLDDR"); break;
+      case 0xB9: printf("\tCPDR"); break;
+      case 0xBA: printf("\tIMDR"); break;
+      case 0xBB: printf("\tOUTDR"); break;
+
+      default: printf("\tILLEGAL INSTRUCTION");break;
     }
   }
   printf("\n");
