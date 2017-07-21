@@ -20,7 +20,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
   int inst_bytes=1;
   uint8_t bit_flag=0, ix_flag=0,extd_flag=0,iy_flag=0;//these are set whenever a instruction of their kind is found
   printf("%04x ", pc);
-  printf("%02x", buffer[pc]);
+  printf("%02x ", buffer[pc]);
   switch (instruction) {
     //MAIN INSTRUCTIONS
     case 0x00: printf("\tNOP"); break;
@@ -238,7 +238,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
     case 0xC8: printf("\tRET Z"); break;
     case 0xC9: printf("\tRET"); break;
     case 0xCA: printf("\tJP Z, %02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=3; break;
-    case 0xCB: printf("\t-BIT INSTRUCTION-"); break;//FIXME BITS GO HERE
+    case 0xCB: bit_flag=1; break;// BITS GO HERE
     case 0xCC: printf("\tCALL Z,%02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=3; break;
     case 0xCD: printf("\tCALL %02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=3; break;
     case 0xCE: printf("\tADC A, %02x",buffer[pc+1]); inst_bytes=2; break;
@@ -298,7 +298,10 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
     //BIT INSTRUCTIONS
     default: printf("\t illegal instruction"); break;
   }
+  /*If 0xCB was found, it is a bit instruction
+  interpreted here below*/
   if(bit_flag){
+    printf("%02X",buffer[pc]+1);//instruction code
     switch (buffer[pc]+1) {
       case 0x00: printf("\tRLC B"); break;
       case 0x01: printf("\tRLC C"); break;
