@@ -191,7 +191,107 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
     case 0x9E: printf("\tSBC A, [HL]"); break;
     case 0x9F: printf("\tSBC A, A"); break;
 
+    case 0xA0: printf("\tAND B"); break;
+    case 0xA1: printf("\tAND C"); break;
+    case 0xA2: printf("\tAND D"); break;
+    case 0xA3: printf("\tAND E"); break;
+    case 0xA4: printf("\tAND H"); break;
+    case 0xA5: printf("\tAND L"); break;
+    case 0xA6: printf("\tAND [HL]"); break;
+    case 0xA7: printf("\tAND A"); break;
+    case 0xA8: printf("\tXOR B"); break;
+    case 0xA9: printf("\tXOR C"); break;
+    case 0xAA: printf("\tXOR D"); break;
+    case 0xAB: printf("\tXOR E"); break;
+    case 0xAC: printf("\tXOR H"); break;
+    case 0xAD: printf("\tXOR L"); break;
+    case 0xAE: printf("\tXOR [HL]"); break;
+    case 0xAF: printf("\tXOR A"); break;
 
+    case 0xB0: printf("\tOR B"); break;
+    case 0xB1: printf("\tOR C"); break;
+    case 0xB2: printf("\tOR D"); break;
+    case 0xB3: printf("\tOR E"); break;
+    case 0xB4: printf("\tOR H"); break;
+    case 0xB5: printf("\tOR L"); break;
+    case 0xB6: printf("\tOR [HL]"); break;
+    case 0xB7: printf("\tOR A"); break;
+    case 0xB8: printf("\tCP B"); break;
+    case 0xB9: printf("\tCP C"); break;
+    case 0xBA: printf("\tCP D"); break;
+    case 0xBB: printf("\tCP E"); break;
+    case 0xBC: printf("\tCP H"); break;
+    case 0xBD: printf("\tCP L"); break;
+    case 0xBE: printf("\tCP [HL]"); break;
+    case 0xBF: printf("\tCP A"); break;
+
+    case 0xc0: printf("\tRET NZ"); break;
+    case 0xc1: printf("\tPOP BC"); break;
+    case 0xc2: printf("\tJP NZ %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xc3: printf("\tJP %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xC4: printf("\tCALL NZ %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xC5: printf("\tPUSH BC"); break;
+    case 0xC6: printf("\tADD A, %02x",buffer[pc+1]); break;
+    case 0xC7: printf("\tRST 00h"); break;
+    case 0xC8: printf("\tRET Z"); break;
+    case 0xC9: printf("\tRET"); break;
+    case 0xCA: printf("\tJP Z, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xCB: printf("\t-BIT INSTRUCTION-"); break;//FIXME BITS GO HERE
+    case 0xCC: printf("\tCALL Z,%02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xCD: printf("\tCALL %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xCE: printf("\tADC A, %02x",buffer[pc+1]); break;
+    case 0xCF: printf("\tRST 08h"); break;
+
+    case 0xD0: printf("\tRET NC"); break;
+    case 0xD1: printf("\tPOP DE"); break;
+    case 0xD2: printf("\tJP NC %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xD3: printf("\tOUT [%02x], A ",buffer[pc+1]); break;
+    case 0xD4: printf("\tCALL NC %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xD5: printf("\tPUSH DE"); break;
+    case 0xD6: printf("\tSUB %02x",buffer[pc+1]); break;
+    case 0xD7: printf("\tRST 10h"); break;
+    case 0xD8: printf("\tRET C"); break;
+    case 0xD9: printf("\tEXX"); break;
+    case 0xDA: printf("\tJP C, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+    case 0xDB: printf("\tIN A, [%02x]",buffer[pc+1]); break;//FIXME BITS GO HERE
+    case 0xDC: printf("\tCALL C,[%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+    case 0xDD: printf("\t-IX INSTRUCTION-"); break;
+    case 0xDE: printf("\tSBC A, %02x",buffer[pc+1]); break;
+    case 0xDF: printf("\tRST 18h"); break;
+
+    case 0xE0: printf("\tRET PO"); break;
+    case 0xE1: printf("\tPOP HL"); break;
+    case 0xE2: printf("\tJP PO %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xE3: printf("\tEX [SP], HL "); break;
+    case 0xE4: printf("\tCALL PO %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xE5: printf("\tPUSH HL"); break;
+    case 0xE6: printf("\tAND %02x",buffer[pc+1]); break;
+    case 0xE7: printf("\tRST 20h"); break;
+    case 0xE8: printf("\tRET PE"); break;
+    case 0xE9: printf("\tJP [HL]"); break;
+    case 0xEA: printf("\tJP PE, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xEB: printf("\tEX DE, HL"); break;//FIXME BITS GO HERE
+    case 0xEC: printf("\tCALL PE, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xED: printf("\t-EXTD INSTRUCTION-"); break;
+    case 0xEE: printf("\tXOR %02x",buffer[pc+1]); break;
+    case 0xEF: printf("\tRST 28h"); break;
+
+    case 0xF0: printf("\tRET P"); break;
+    case 0xF1: printf("\tPOP AF"); break;
+    case 0xF2: printf("\tJP P %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xF3: printf("\tDI"); break;
+    case 0xF4: printf("\tCALL P %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xF5: printf("\tPUSH AF"); break;
+    case 0xF6: printf("\tOR %02x",buffer[pc+1]); break;
+    case 0xF7: printf("\tRST 30h"); break;
+    case 0xF8: printf("\tRET M"); break;
+    case 0xF9: printf("\tLD SP, HL"); break;
+    case 0xFA: printf("\tJP M, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xFB: printf("\tEI"); break;//FIXME BITS GO HERE
+    case 0xFC: printf("\tCALL M, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+    case 0xFD: printf("\t-IY INSTRUCTION-"); break;
+    case 0xFE: printf("\tCP %02x",buffer[pc+1]); break;
+    case 0xFF: printf("\tRST 38h"); break;
 
     default: printf("\tinimplemented instruction"); break;
   }
