@@ -292,7 +292,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
     case 0xFB: printf("\tEI"); break;//FIXME BITS GO HERE
     case 0xFC: printf("\tCALL M, %02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=3; break;
     case 0xFD: iy_flag=1; break;
-    case 0xFE: printf("\tCP %02x",buffer[pc+1]); break;
+    case 0xFE: printf("\tCP %02x",buffer[pc+1]);inst_bytes=2; break;
     case 0xFF: printf("\tRST 38h"); break;
 
     //BIT INSTRUCTIONS
@@ -582,6 +582,8 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
     printf("%02X",buffer[pc+1]);//instruction code
     inst_bytes=2;
     switch (buffer[pc+1]) {
+      case 0x23: printf("\tUndocumented 8 T-State NOP"); break;
+
       case 0x40: printf("\tIN B, (C)"); break;
       case 0x41: printf("\tOUT (C), B"); break;
       case 0x42: printf("\tSBC HL, BC"); break;
