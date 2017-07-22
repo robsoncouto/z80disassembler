@@ -671,6 +671,115 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       default: printf("\tILLEGAL INSTRUCTION");break;
     }
   }
+
+  if(ix_flag){
+    printf("%02X",buffer[pc]+1);//instruction code
+    inst_bytes=2;
+    switch (buffer[pc]+1) {
+      case 0x09:printf("\tADD IX, BC"); break;
+      case 0x19:printf("\tADD IX, DE"); break;
+
+      case 0x21: printf("\tLD IX, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
+      case 0x22: printf("\tLD [%02x%02x], IX",buffer[pc+1],buffer[pc+2]); break;
+      case 0x23: printf("\tINC IX"); break;
+      case 0x24: printf("\tINC IXH"); break;
+      case 0x25: printf("\tDEC IXH"); break;
+      case 0x26: printf("\tLD IXH, %02x", buffer[pc+1]); break;
+      case 0x29: printf("\tADD IX, IX"); break;
+      case 0x2A: printf("\tLD IX, [%02x%02x]",buffer[pc+1],buffer[pc+2])); break;
+      case 0x2B: printf("\tDEC IX"); break;
+      case 0x2C: printf("\tINC IXL"); break;
+      case 0x2D: printf("\tDEC IXL"); break;
+      case 0x2E: printf("\tLD IXL, %02x", buffer[pc+1]); break;
+
+      case 0x34: printf("\tINC (IX+%02x)", buffer[pc+1]); break;
+      case 0x35: printf("\tDEC (IX+%02x)", buffer[pc+1]); break;
+      case 0x36: printf("\tLD (IX+%02x), %02x", buffer[pc+1], buffer[pc+2]); break;
+      case 0x39: printf("\tADD IX, SP"); break;
+
+      case 0x44: printf("\tLD B, IXH"); break;
+      case 0x45: printf("\tLD B, IXL"); break;
+      case 0x46: printf("\tLD B, [IX+%02x]", buffer[pc+1]); break;
+      case 0x4C: printf("\tLD C, IXH"); break;
+      case 0x4D: printf("\tLD C, IXL"); break;
+      case 0x4E: printf("\tLD C, [IX+%02x]", buffer[pc+1]); break;
+
+      case 0x54: printf("\tLD D, IXH"); break;
+      case 0x55: printf("\tLD D, IXL"); break;
+      case 0x56: printf("\tLD D, [IX+%02x]", buffer[pc+1]); break;
+      case 0x5C: printf("\tLD E, IXH"); break;
+      case 0x5D: printf("\tLD E, IXL"); break;
+      case 0x5E: printf("\tLD E, [IX+%02x]", buffer[pc+1]); break;
+
+      case 0x60: printf("\tLD IXH, B"); break;
+      case 0x61: printf("\tLD IXH, C"); break;
+      case 0x62: printf("\tLD IXH, D"); break;
+      case 0x63: printf("\tLD IXH, E"); break;
+      case 0x64: printf("\tLD IXH, IXH"); break;
+      case 0x65: printf("\tLD IXH, IXL"); break;
+      case 0x66: printf("\tLD H, [IX+%02x]", buffer[pc+1]); break;
+      case 0x67: printf("\tLD IXH, A"); break;
+      case 0x68: printf("\tLD IXL, B"); break;
+      case 0x69: printf("\tLD IXL, C"); break;
+      case 0x6A: printf("\tLD IXL, D"); break;
+      case 0x6B: printf("\tLD IXL, E"); break;
+      case 0x6C: printf("\tLD IXL, IXH"); break;
+      case 0x6D: printf("\tLD IXL, IXL"); break;
+      case 0x6E: printf("\tLD L, [IX+%02x]", buffer[pc+1]); break;
+      case 0x6F: printf("\tLD IXL, A"); break;
+
+      case 0x70: printf("\tLD [IX+%02x], B", buffer[pc+1]); break;
+      case 0x71: printf("\tLD [IX+%02x], C", buffer[pc+1]); break;
+      case 0x72: printf("\tLD [IX+%02x], D", buffer[pc+1]); break;
+      case 0x73: printf("\tLD [IX+%02x], E", buffer[pc+1]); break;
+      case 0x74: printf("\tLD [IX+%02x], H", buffer[pc+1]); break;
+      case 0x75: printf("\tLD [IX+%02x], L", buffer[pc+1]); break;
+      case 0x77: printf("\tLD [IX+%02x], A", buffer[pc+1]); break;
+      case 0x7C: printf("\tLD A, IXH"); break;
+      case 0x7D: printf("\tLD A, IXL"); break;
+      case 0x7E: printf("\tLD A, [IX+%02x]", buffer[pc+1]); break;
+
+      case 0x84: printf("\tADD A, IXH"); break;
+      case 0x85: printf("\tADD A, IXL"); break;
+      case 0x86: printf("\tADD A, [IX+%02x]", buffer[pc+1]); break;
+      case 0x8C: printf("\tADC A, IXH"); break;
+      case 0x8D: printf("\tADC A, IXL"); break;
+      case 0x8E: printf("\tADC A, [IX+%02x]", buffer[pc+1]); break;
+
+      case 0x94: printf("\tSUB IXH"); break;
+      case 0x95: printf("\tSUB IXL"); break;
+      case 0x96: printf("\tSUB [IX+%02x]", buffer[pc+1]); break;
+      case 0x9C: printf("\tSBC A, IXH"); break;
+      case 0x9D: printf("\tSBC A, IXL"); break;
+      case 0x9E: printf("\tSBC A, [IX+%02x]", buffer[pc+1]); break;
+
+      case 0x94: printf("\tAND IXH"); break;
+      case 0x95: printf("\tAND IXL"); break;
+      case 0x96: printf("\tAND [IX+%02x]", buffer[pc+1]); break;
+      case 0x9C: printf("\tXOR IXH"); break;
+      case 0x9D: printf("\tXOR IXL"); break;
+      case 0x9E: printf("\tXOR [IX+%02x]", buffer[pc+1]); break;
+
+      case 0xA4: printf("\tOR IXH"); break;
+      case 0xA5: printf("\tOR IXL"); break;
+      case 0xA6: printf("\tOR [IX+%02x]", buffer[pc+1]); break;
+      case 0xAC: printf("\tCP IXH"); break;
+      case 0xAD: printf("\tCP IXL"); break;
+      case 0xAE: printf("\tCP [IX+%02x]", buffer[pc+1]); break;
+
+      case 0xCB: ix_bit_flag; break;
+
+      case 0xE1: printf("POP IX"); break;
+      case 0xE3: printf("EX [SP], IX"); break;
+      case 0xE5: printf("\tPUSH IX"); break;
+      case 0xE9: printf("\tJP [IX]"); break;
+
+      case 0xF9: printf("LD SP, IX"); break;
+
+
+    }
+
+  }
   printf("\n");
   return inst_bytes;
 
