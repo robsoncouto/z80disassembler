@@ -18,7 +18,7 @@ int32_t check_file_size(FILE *fp){
 uint8_t disassemble(uint8_t *buffer, uint32_t pc){
   uint8_t instruction=buffer[pc];
   int inst_bytes=1;
-  uint8_t bit_flag=0, ix_flag=0,extd_flag=0,iy_flag=0;//these are set whenever a instruction of their kind is found
+  uint8_t bit_flag=0, ix_flag=0,ix_bit_flag=0, extd_flag=0,iy_flag=0;//these are set whenever a instruction of their kind is found
   printf("%04x ", pc);
   printf("%02x ", buffer[pc]);
   switch (instruction) {
@@ -585,7 +585,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x40: printf("\tIN B, [C]"); break;
       case 0x41: printf("\tOUT [C], B"); break;
       case 0x42: printf("\tSBC HL, BC"); break;
-      case 0x43: printf("\tLD [%02x%02x], BC",buffer[pc+1],buffer[pc+2]); break;
+      case 0x43: printf("\tLD [%02x%02x], BC",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x44: printf("\tNEG"); break;
       case 0x45: printf("\tRETN"); break;
       case 0x46: printf("\tIM 0"); break;
@@ -593,7 +593,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x48: printf("\tIN C, [C]"); break;
       case 0x49: printf("\tOUT [C], C"); break;
       case 0x4A: printf("\tADC [HL], BC"); break;
-      case 0x4B: printf("\tLD BC, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x4B: printf("\tLD BC, [%02x%02x]",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x4C: printf("\tNEG"); break;
       case 0x4D: printf("\tRETI"); break;
       case 0x4E: printf("\tIM 0/1"); break;
@@ -602,7 +602,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x50: printf("\tIN D, [C]"); break;
       case 0x51: printf("\tOUT [C], D"); break;
       case 0x52: printf("\tSBC HL, DE"); break;
-      case 0x53: printf("\tLD [%02x%02x], DE",buffer[pc+1],buffer[pc+2]); break;
+      case 0x53: printf("\tLD [%02x%02x], DE",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x54: printf("\tNEG"); break;
       case 0x55: printf("\tRETN"); break;
       case 0x56: printf("\tIM 1"); break;
@@ -610,7 +610,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x58: printf("\tIN E, [C]"); break;
       case 0x59: printf("\tOUT [C], E"); break;
       case 0x5A: printf("\tADC [HL], DE"); break;
-      case 0x5B: printf("\tLD DE, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x5B: printf("\tLD DE, [%02x%02x]",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x5C: printf("\tNEG"); break;
       case 0x5D: printf("\tRETN"); break;
       case 0x5E: printf("\tIM 2"); break;
@@ -619,7 +619,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x60: printf("\tIN H, [C]"); break;
       case 0x61: printf("\tOUT [C], H"); break;
       case 0x62: printf("\tSBC HL, HL"); break;
-      case 0x63: printf("\tLD [%02x%02x], HL",buffer[pc+1],buffer[pc+2]); break;
+      case 0x63: printf("\tLD [%02x%02x], HL",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x64: printf("\tNEG"); break;
       case 0x65: printf("\tRETN"); break;
       case 0x66: printf("\tIM 0"); break;
@@ -627,7 +627,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x68: printf("\tIN L, [C]"); break;
       case 0x69: printf("\tOUT [C], L"); break;
       case 0x6A: printf("\tADC [HL], HL"); break;
-      case 0x6B: printf("\tLD HL, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x6B: printf("\tLD HL, [%02x%02x]",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x6C: printf("\tNEG"); break;
       case 0x6D: printf("\tRETN"); break;
       case 0x6E: printf("\tIM 0/1"); break;
@@ -636,7 +636,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x70: printf("\tIN [C]"); break;
       case 0x71: printf("\tOUT [C], 0"); break;
       case 0x72: printf("\tSBC HL, SP"); break;
-      case 0x73: printf("\tLD [%02x%02x], SP",buffer[pc+1],buffer[pc+2]); break;
+      case 0x73: printf("\tLD [%02x%02x], SP",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x74: printf("\tNEG"); break;
       case 0x75: printf("\tRETN"); break;
       case 0x76: printf("\tIM 1"); break;
@@ -644,7 +644,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x78: printf("\tIN A, [C]"); break;
       case 0x79: printf("\tOUT [C], A"); break;
       case 0x7A: printf("\tADC [HL], SP"); break;
-      case 0x7B: printf("\tLD SP, [%02x%02x]",buffer[pc+1],buffer[pc+2]); break;
+      case 0x7B: printf("\tLD SP, [%02x%02x]",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x7C: printf("\tNEG"); break;
       case 0x7D: printf("\tRETN"); break;
       case 0x7E: printf("\tIM 2"); break;
@@ -679,37 +679,37 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x09:printf("\tADD IX, BC"); break;
       case 0x19:printf("\tADD IX, DE"); break;
 
-      case 0x21: printf("\tLD IX, %02x%02x",buffer[pc+1],buffer[pc+2]); break;
-      case 0x22: printf("\tLD [%02x%02x], IX",buffer[pc+1],buffer[pc+2]); break;
+      case 0x21: printf("\tLD IX, %02x%02x",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
+      case 0x22: printf("\tLD [%02x%02x], IX",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x23: printf("\tINC IX"); break;
       case 0x24: printf("\tINC IXH"); break;
       case 0x25: printf("\tDEC IXH"); break;
-      case 0x26: printf("\tLD IXH, %02x", buffer[pc+1]); break;
+      case 0x26: printf("\tLD IXH, %02x", buffer[pc+1]); inst_bytes=3; break;
       case 0x29: printf("\tADD IX, IX"); break;
-      case 0x2A: printf("\tLD IX, [%02x%02x]",buffer[pc+1],buffer[pc+2])); break;
+      case 0x2A: printf("\tLD IX, [%02x%02x]",buffer[pc+1],buffer[pc+2]); inst_bytes=4; break;
       case 0x2B: printf("\tDEC IX"); break;
       case 0x2C: printf("\tINC IXL"); break;
       case 0x2D: printf("\tDEC IXL"); break;
-      case 0x2E: printf("\tLD IXL, %02x", buffer[pc+1]); break;
+      case 0x2E: printf("\tLD IXL, %02x", buffer[pc+1]); inst_bytes=3; break;
 
-      case 0x34: printf("\tINC (IX+%02x)", buffer[pc+1]); break;
-      case 0x35: printf("\tDEC (IX+%02x)", buffer[pc+1]); break;
-      case 0x36: printf("\tLD (IX+%02x), %02x", buffer[pc+1], buffer[pc+2]); break;
+      case 0x34: printf("\tINC (IX+%02x)", buffer[pc+1]); inst_bytes=3; break;
+      case 0x35: printf("\tDEC (IX+%02x)", buffer[pc+1]); inst_bytes=3; break;
+      case 0x36: printf("\tLD (IX+%02x), %02x", buffer[pc+1], buffer[pc+2]); inst_bytes=4; break;
       case 0x39: printf("\tADD IX, SP"); break;
 
       case 0x44: printf("\tLD B, IXH"); break;
       case 0x45: printf("\tLD B, IXL"); break;
-      case 0x46: printf("\tLD B, [IX+%02x]", buffer[pc+1]); break;
+      case 0x46: printf("\tLD B, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
       case 0x4C: printf("\tLD C, IXH"); break;
       case 0x4D: printf("\tLD C, IXL"); break;
-      case 0x4E: printf("\tLD C, [IX+%02x]", buffer[pc+1]); break;
+      case 0x4E: printf("\tLD C, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
       case 0x54: printf("\tLD D, IXH"); break;
       case 0x55: printf("\tLD D, IXL"); break;
-      case 0x56: printf("\tLD D, [IX+%02x]", buffer[pc+1]); break;
+      case 0x56: printf("\tLD D, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
       case 0x5C: printf("\tLD E, IXH"); break;
       case 0x5D: printf("\tLD E, IXL"); break;
-      case 0x5E: printf("\tLD E, [IX+%02x]", buffer[pc+1]); break;
+      case 0x5E: printf("\tLD E, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
       case 0x60: printf("\tLD IXH, B"); break;
       case 0x61: printf("\tLD IXH, C"); break;
@@ -717,7 +717,7 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x63: printf("\tLD IXH, E"); break;
       case 0x64: printf("\tLD IXH, IXH"); break;
       case 0x65: printf("\tLD IXH, IXL"); break;
-      case 0x66: printf("\tLD H, [IX+%02x]", buffer[pc+1]); break;
+      case 0x66: printf("\tLD H, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
       case 0x67: printf("\tLD IXH, A"); break;
       case 0x68: printf("\tLD IXL, B"); break;
       case 0x69: printf("\tLD IXL, C"); break;
@@ -725,49 +725,49 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
       case 0x6B: printf("\tLD IXL, E"); break;
       case 0x6C: printf("\tLD IXL, IXH"); break;
       case 0x6D: printf("\tLD IXL, IXL"); break;
-      case 0x6E: printf("\tLD L, [IX+%02x]", buffer[pc+1]); break;
+      case 0x6E: printf("\tLD L, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
       case 0x6F: printf("\tLD IXL, A"); break;
 
-      case 0x70: printf("\tLD [IX+%02x], B", buffer[pc+1]); break;
-      case 0x71: printf("\tLD [IX+%02x], C", buffer[pc+1]); break;
-      case 0x72: printf("\tLD [IX+%02x], D", buffer[pc+1]); break;
-      case 0x73: printf("\tLD [IX+%02x], E", buffer[pc+1]); break;
-      case 0x74: printf("\tLD [IX+%02x], H", buffer[pc+1]); break;
-      case 0x75: printf("\tLD [IX+%02x], L", buffer[pc+1]); break;
-      case 0x77: printf("\tLD [IX+%02x], A", buffer[pc+1]); break;
+      case 0x70: printf("\tLD [IX+%02x], B", buffer[pc+1]); inst_bytes=3; break;
+      case 0x71: printf("\tLD [IX+%02x], C", buffer[pc+1]); inst_bytes=3; break;
+      case 0x72: printf("\tLD [IX+%02x], D", buffer[pc+1]); inst_bytes=3; break;
+      case 0x73: printf("\tLD [IX+%02x], E", buffer[pc+1]); inst_bytes=3; break;
+      case 0x74: printf("\tLD [IX+%02x], H", buffer[pc+1]); inst_bytes=3; break;
+      case 0x75: printf("\tLD [IX+%02x], L", buffer[pc+1]); inst_bytes=3; break;
+      case 0x77: printf("\tLD [IX+%02x], A", buffer[pc+1]); inst_bytes=3; break;
       case 0x7C: printf("\tLD A, IXH"); break;
       case 0x7D: printf("\tLD A, IXL"); break;
-      case 0x7E: printf("\tLD A, [IX+%02x]", buffer[pc+1]); break;
+      case 0x7E: printf("\tLD A, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
       case 0x84: printf("\tADD A, IXH"); break;
       case 0x85: printf("\tADD A, IXL"); break;
-      case 0x86: printf("\tADD A, [IX+%02x]", buffer[pc+1]); break;
+      case 0x86: printf("\tADD A, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
       case 0x8C: printf("\tADC A, IXH"); break;
       case 0x8D: printf("\tADC A, IXL"); break;
-      case 0x8E: printf("\tADC A, [IX+%02x]", buffer[pc+1]); break;
+      case 0x8E: printf("\tADC A, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
       case 0x94: printf("\tSUB IXH"); break;
       case 0x95: printf("\tSUB IXL"); break;
-      case 0x96: printf("\tSUB [IX+%02x]", buffer[pc+1]); break;
+      case 0x96: printf("\tSUB [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
       case 0x9C: printf("\tSBC A, IXH"); break;
       case 0x9D: printf("\tSBC A, IXL"); break;
-      case 0x9E: printf("\tSBC A, [IX+%02x]", buffer[pc+1]); break;
+      case 0x9E: printf("\tSBC A, [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
-      case 0x94: printf("\tAND IXH"); break;
-      case 0x95: printf("\tAND IXL"); break;
-      case 0x96: printf("\tAND [IX+%02x]", buffer[pc+1]); break;
-      case 0x9C: printf("\tXOR IXH"); break;
-      case 0x9D: printf("\tXOR IXL"); break;
-      case 0x9E: printf("\tXOR [IX+%02x]", buffer[pc+1]); break;
+      case 0xA4: printf("\tAND IXH"); break;
+      case 0xA5: printf("\tAND IXL"); break;
+      case 0xA6: printf("\tAND [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
+      case 0xAC: printf("\tXOR IXH"); break;
+      case 0xAD: printf("\tXOR IXL"); break;
+      case 0xAE: printf("\tXOR [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
-      case 0xA4: printf("\tOR IXH"); break;
-      case 0xA5: printf("\tOR IXL"); break;
-      case 0xA6: printf("\tOR [IX+%02x]", buffer[pc+1]); break;
-      case 0xAC: printf("\tCP IXH"); break;
-      case 0xAD: printf("\tCP IXL"); break;
-      case 0xAE: printf("\tCP [IX+%02x]", buffer[pc+1]); break;
+      case 0xB4: printf("\tOR IXH"); break;
+      case 0xB5: printf("\tOR IXL"); break;
+      case 0xB6: printf("\tOR [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
+      case 0xBC: printf("\tCP IXH"); break;
+      case 0xBD: printf("\tCP IXL"); break;
+      case 0xBE: printf("\tCP [IX+%02x]", buffer[pc+1]); inst_bytes=3; break;
 
-      case 0xCB: ix_bit_flag; break;
+      case 0xCB: ix_bit_flag=1; break;
 
       case 0xE1: printf("POP IX"); break;
       case 0xE3: printf("EX [SP], IX"); break;
@@ -779,6 +779,287 @@ uint8_t disassemble(uint8_t *buffer, uint32_t pc){
 
     }
 
+  }
+  if(ix_bit_flag){
+    printf("%02X",buffer[pc]+1);//instruction code
+    printf("%02X",buffer[pc]+2);//instruction code
+    printf("%02X",buffer[pc]+3);//instruction code
+
+    inst_bytes=4;
+    switch (buffer[pc]+3){
+      case 0x00: printf("\tRLC (IX+%02x), B",buffer[pc]+2); break;
+      case 0x01: printf("\tRLC (IX+%02x), C",buffer[pc]+2); break;
+      case 0x02: printf("\tRLC (IX+%02x), D",buffer[pc]+2); break;
+      case 0x03: printf("\tRLC (IX+%02x), E",buffer[pc]+2); break;
+      case 0x04: printf("\tRLC (IX+%02x), H",buffer[pc]+2); break;
+      case 0x05: printf("\tRLC (IX+%02x), L",buffer[pc]+2); break;
+      case 0x06: printf("\tRLC (IX+%02x)",buffer[pc]+2); break;
+      case 0x07: printf("\tRLC (IX+%02x),  A",buffer[pc]+2); break;
+      case 0x08: printf("\tRRC (IX+%02x), B",buffer[pc]+2); break;
+      case 0x09: printf("\tRRC (IX+%02x), C",buffer[pc]+2); break;
+      case 0x0A: printf("\tRRC (IX+%02x), D",buffer[pc]+2); break;
+      case 0x0B: printf("\tRRC (IX+%02x), E",buffer[pc]+2); break;
+      case 0x0C: printf("\tRRC (IX+%02x), H",buffer[pc]+2); break;
+      case 0x0D: printf("\tRRC (IX+%02x), L",buffer[pc]+2); break;
+      case 0x0E: printf("\tRRC (IX+%02x)",buffer[pc]+2); break;
+      case 0x0F: printf("\tRRC (IX+%02x), A",buffer[pc]+2); break;
+
+      case 0x10: printf("\tRL (IX+%02x), B",buffer[pc]+2); break;
+      case 0x11: printf("\tRL (IX+%02x), C",buffer[pc]+2); break;
+      case 0x12: printf("\tRL (IX+%02x), D",buffer[pc]+2); break;
+      case 0x13: printf("\tRL (IX+%02x), E",buffer[pc]+2); break;
+      case 0x14: printf("\tRL (IX+%02x), H",buffer[pc]+2); break;
+      case 0x15: printf("\tRL (IX+%02x), L",buffer[pc]+2); break;
+      case 0x16: printf("\tRL (IX+%02x)",buffer[pc]+2); break;
+      case 0x17: printf("\tRL (IX+%02x), A",buffer[pc]+2); break;
+      case 0x18: printf("\tRR (IX+%02x), B",buffer[pc]+2); break;
+      case 0x19: printf("\tRR (IX+%02x), C",buffer[pc]+2); break;
+      case 0x1A: printf("\tRR (IX+%02x), D",buffer[pc]+2); break;
+      case 0x1B: printf("\tRR (IX+%02x), E",buffer[pc]+2); break;
+      case 0x1C: printf("\tRR (IX+%02x), H",buffer[pc]+2); break;
+      case 0x1D: printf("\tRR (IX+%02x), L",buffer[pc]+2); break;
+      case 0x1E: printf("\tRR (IX+%02x)",buffer[pc]+2); break;
+      case 0x1F: printf("\tRR (IX+%02x), A",buffer[pc]+2); break;
+
+      case 0x20: printf("\tSLA (IX+%02x), B",buffer[pc]+2); break;
+      case 0x21: printf("\tSLA (IX+%02x), C",buffer[pc]+2); break;
+      case 0x22: printf("\tSLA (IX+%02x), D",buffer[pc]+2); break;
+      case 0x23: printf("\tSLA (IX+%02x), E",buffer[pc]+2); break;
+      case 0x24: printf("\tSLA (IX+%02x), H",buffer[pc]+2); break;
+      case 0x25: printf("\tSLA (IX+%02x), L",buffer[pc]+2); break;
+      case 0x26: printf("\tSLA (IX+%02x)",buffer[pc]+2); break;
+      case 0x27: printf("\tSLA (IX+%02x), A",buffer[pc]+2); break;
+      case 0x28: printf("\tSRA (IX+%02x), B",buffer[pc]+2); break;
+      case 0x29: printf("\tSRA (IX+%02x), C",buffer[pc]+2); break;
+      case 0x2A: printf("\tSRA (IX+%02x), D",buffer[pc]+2); break;
+      case 0x2B: printf("\tSRA (IX+%02x), E",buffer[pc]+2); break;
+      case 0x2C: printf("\tSRA (IX+%02x), H",buffer[pc]+2); break;
+      case 0x2D: printf("\tSRA (IX+%02x), L",buffer[pc]+2); break;
+      case 0x2E: printf("\tSRA (IX+%02x)",buffer[pc]+2); break;
+      case 0x2F: printf("\tSRA (IX+%02x), A",buffer[pc]+2); break;
+
+      case 0x30: printf("\tSLL (IX+%02x), B",buffer[pc]+2); break;
+      case 0x31: printf("\tSLL (IX+%02x), C",buffer[pc]+2); break;
+      case 0x32: printf("\tSLL (IX+%02x), D",buffer[pc]+2); break;
+      case 0x33: printf("\tSLL (IX+%02x), E",buffer[pc]+2); break;
+      case 0x34: printf("\tSLL (IX+%02x), H",buffer[pc]+2); break;
+      case 0x35: printf("\tSLL (IX+%02x), L",buffer[pc]+2); break;
+      case 0x36: printf("\tSLL (IX+%02x)",buffer[pc]+2); break;
+      case 0x37: printf("\tSLA (IX+%02x), A",buffer[pc]+2); break;
+      case 0x38: printf("\tSRL (IX+%02x), B",buffer[pc]+2); break;
+      case 0x39: printf("\tSRL (IX+%02x), C",buffer[pc]+2); break;
+      case 0x3A: printf("\tSRL (IX+%02x), D",buffer[pc]+2); break;
+      case 0x3B: printf("\tSRL (IX+%02x), E",buffer[pc]+2); break;
+      case 0x3C: printf("\tSRL (IX+%02x), H",buffer[pc]+2); break;
+      case 0x3D: printf("\tSRL (IX+%02x), L",buffer[pc]+2); break;
+      case 0x3E: printf("\tSRL (IX+%02x)",buffer[pc]+2); break;
+      case 0x3F: printf("\tSRL (IX+%02x), A",buffer[pc]+2); break;
+
+      case 0x40: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x41: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x42: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x43: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x44: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x45: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x46: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x47: printf("\tBIT 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x48: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x49: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x4A: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x4B: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x4C: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x4D: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x4E: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x4F: printf("\tBIT 1, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0x50: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x51: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x52: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x53: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x54: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x55: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x56: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x57: printf("\tBIT 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x58: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x59: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x5A: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x5B: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x5C: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x5D: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x5E: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x5F: printf("\tBIT 3, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0x60: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x61: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x62: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x63: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x64: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x65: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x66: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x67: printf("\tBIT 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0x68: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x69: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x6A: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x6B: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x6C: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x6D: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x6E: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0x6F: printf("\tBIT 5, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0x70: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x71: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x72: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x73: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x74: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x75: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x76: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x77: printf("\tBIT 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0x78: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x79: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x7A: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x7B: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x7C: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x7D: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x7E: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0x7F: printf("\tBIT 7, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0x80: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x81: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x82: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x83: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x84: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x85: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x86: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x87: printf("\tRES 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0x88: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x89: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x8A: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x8B: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x8C: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x8D: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x8E: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0x8F: printf("\tRES 1, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0x90: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x91: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x92: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x93: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x94: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x95: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x96: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x97: printf("\tRES 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0x98: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x99: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x9A: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x9B: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x9C: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x9D: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x9E: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0x9F: printf("\tRES 3, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0xA0: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA1: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA2: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA3: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA4: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA5: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA6: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA7: printf("\tRES 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA8: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xA9: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xAA: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xAB: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xAC: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xAD: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xAE: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xAF: printf("\tRES 5, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0xB0: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB1: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB2: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB3: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB4: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB5: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB6: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB7: printf("\tRES 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB8: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xB9: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xBA: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xBB: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xBC: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xBD: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xBE: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xBF: printf("\tRES 7, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0xC0: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC1: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC2: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC3: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC4: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC5: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC6: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC7: printf("\tSET 0, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC8: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xC9: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xCA: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xCB: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xCC: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xCD: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xCE: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+      case 0xCF: printf("\tSET 1, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0xD0: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD1: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD2: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD3: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD4: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD5: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD6: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD7: printf("\tSET 2, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD8: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xD9: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xDA: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xDB: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xDC: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xDD: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xDE: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+      case 0xDF: printf("\tSET 3, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0xE0: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE1: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE2: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE3: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE4: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE5: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE6: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE7: printf("\tSET 4, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE8: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xE9: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xEA: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xEB: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xEC: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xED: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xEE: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+      case 0xEF: printf("\tSET 5, (IX+%02x)",buffer[pc]+2); break;
+
+      case 0xF0: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF1: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF2: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF3: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF4: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF5: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF6: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF7: printf("\tSET 6, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF8: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xF9: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xFA: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xFB: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xFC: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xFD: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xFE: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      case 0xFF: printf("\tSET 7, (IX+%02x)",buffer[pc]+2); break;
+      default: printf("ILLEGAL INSTRUCTION"); break;
+    }
   }
   printf("\n");
   return inst_bytes;
