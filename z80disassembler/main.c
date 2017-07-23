@@ -4,17 +4,6 @@
 #include <string.h>
 
 //http://clrhome.org/table/
-int32_t check_file_size(FILE *fp){
-  uint8_t data;
-  uint32_t filesize=0;
-  if(fp){//if file opened sucessfully
-    fseek(fp, filesize, SEEK_SET);
-    while (fread(&data, 1, 1, fp)==1) {
-      filesize++;
-    }
-    return filesize;
-  }
-}
 
 uint8_t disassemble(uint8_t *buffer, uint32_t pc){
   uint8_t instruction=buffer[pc];
@@ -1469,21 +1458,33 @@ void hexdump(uint8_t* buffer, uint32_t buffersize){
   }
   printf("\n");
 }
-
+int32_t check_file_size(FILE *fp){
+  uint8_t data;
+  uint32_t filesize=0;
+  if(fp){//if file opened sucessfully
+    fseek(fp, filesize, SEEK_SET);
+    while (fread(&data, 1, 1, fp)==1) {
+      filesize++;
+    }
+    return filesize;
+  }
+}
 int main(void){
-  FILE *romptr;
-  romptr=fopen("pacman.bin", "rb");
+  FILE *file;
+  file=fopen("pacman.bin", "rb");
   uint32_t filesize=0;
   printf("z80 disassembler\nRobson Couto 2017\n");
-  filesize=check_file_size(romptr);
+  fseek(file, 0, SEEK_END);
+  filesize=ftell(file);
+
   if(filesize==0){
     printf("File not found");
     return 0;
   }
   printf("File size:%d\n",filesize );
   uint8_t *buffer = (uint8_t *) malloc(filesize);
-  fseek(romptr, 0, SEEK_SET);
-  if (fread(buffer, 1, filesize, romptr)==filesize){
+  fseek(file, 0, SEEK_SET);
+  if (fread(buffer, 1, filesize, file)==filesize){
     printf("Moved file to buffer:%d\n",filesize );
   }
   //hexdump(buffer,filesize);
