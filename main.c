@@ -1458,30 +1458,20 @@ void hexdump(uint8_t* buffer, uint32_t buffersize){
   }
   printf("\n");
 }
-int32_t check_file_size(FILE *fp){
-  uint8_t data;
-  uint32_t filesize=0;
-  if(fp){//if file opened sucessfully
-    fseek(fp, filesize, SEEK_SET);
-    while (fread(&data, 1, 1, fp)==1) {
-      filesize++;
-    }
-    return filesize;
-  }
-}
 int main(void){
   FILE *file;
   file=fopen("pacman.bin", "rb");
   uint32_t filesize=0;
   printf("z80 disassembler\nRobson Couto 2017\n");
-  fseek(file, 0, SEEK_END);
-  filesize=ftell(file);
-
-  if(filesize==0){
+  if(file==NULL){
     printf("File not found");
     return 0;
   }
+  //checks the file size
+  fseek(file, 0, SEEK_END);
+  filesize=ftell(file);
   printf("File size:%d\n",filesize );
+
   uint8_t *buffer = (uint8_t *) malloc(filesize);
   fseek(file, 0, SEEK_SET);
   if (fread(buffer, 1, filesize, file)==filesize){
@@ -1490,7 +1480,7 @@ int main(void){
   //hexdump(buffer,filesize);
   //printf("size of buffer %d ", strlen(buffer));
   uint32_t pc=0;
-  while (pc<=filesize) {
+  while (pc<filesize) {
     pc+= disassemble(buffer,pc);
   }
 
